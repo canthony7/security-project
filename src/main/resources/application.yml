@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/Security?characterEncoding=utf-8&serverTimezone=UTC&useSSL=false
+    username: chet
+    password: Anthony
+  jpa:
+    hibernate:
+      ddl-auto: update
+    #      naming:
+    #        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
+  redis:
+    host: 114.96.127.76
+    port: 6379
+    password: Anthony
+    database: 0
