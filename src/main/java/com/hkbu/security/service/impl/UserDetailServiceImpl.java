@@ -26,5 +26,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
             throw new GlobalException(ResponseEnum.LOGIN_ERROR);
         }
         return new LoginUser(user, new ArrayList<>());
+
     }
 }
