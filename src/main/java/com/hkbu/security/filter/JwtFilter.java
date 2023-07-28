@@ -49,11 +49,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // token有效：封装authentication添加到SecurityContextHolder中，这代表通过认证
         LoginUser loginUser = redisCache.getCacheObject(userId + ":token");
-        System.out.println(loginUser);
         if (loginUser == null){
             throw new GlobalException(ResponseEnum.TOKEN_ERROR);
         }
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
+        System.out.println(loginUser);
+
+        // 自己通过Redis为SecurityContextHolder对象时，要手动把权限信息加进入
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 //        redisCache.setCacheObject(userId + ":token", loginUser, 60, TimeUnit.MINUTES);
         filterChain.doFilter(request, response);

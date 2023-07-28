@@ -1,13 +1,16 @@
 package com.hkbu.security.pojo;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "sys_role")
 @EntityListeners(AuditingEntityListener.class)

@@ -77,9 +77,9 @@ public class SecurityConfig {
                 // 配置路径是否需要认证
                 .authorizeRequests()
                 // 允许匿名访问
-                .antMatchers("/user/login", "/user/register", "/test/funny").permitAll()
+                .antMatchers("/user/login", "/user/register").permitAll()
                 // 配置权限
-                .antMatchers("/test/any", "/user/logout").authenticated()
+                .antMatchers("/test/any", "/user/logout", "/test/funny").authenticated()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()
