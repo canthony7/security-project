@@ -16,7 +16,7 @@ public class TestController {
     }
 
     @GetMapping("/funny")
-    @PreAuthorize("hasAuthority('sys:book:list')")
+    @PreAuthorize("hasAuthority('sys:book:delete')")
     public ResponseBean test02(){
         return ResponseBean.success("funny day");
     }

@@ -25,7 +25,7 @@ public enum ResponseEnum {
 
     EMPTY_TOKEN(40005, "token为空"),
 
-    NOT_EXIST_ERROR(40006, "用户不存在"),
+    NOT_EXIST_ERROR(40006, "用户名或密码错误"),
 
     ADD_GOODS_ERROR(40007, "添加商品失败"),
 
@@ -33,7 +33,9 @@ public enum ResponseEnum {
 
     ORDER_ERROR(40009, "下单错误"),
 
-    ILLEGAL_TOKEN_ERROR(40010, "token非法");
+    ILLEGAL_TOKEN_ERROR(40010, "token非法"),
+
+    REQUEST_FORBID_ERROR(4003, "您没有访问该资源的权限");
 
     private final Integer code;
     private final String message;
