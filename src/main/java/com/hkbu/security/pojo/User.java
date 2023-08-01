@@ -1,9 +1,7 @@
 package com.hkbu.security.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -18,7 +16,8 @@ import java.util.Set;
  *
  * @author 三更
  */
-@Data
+@Getter
+@Setter
 @Table(name = "sys_user")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -101,7 +100,7 @@ public class User {
     @Column(name = "del_flag")
     private Integer delFlag;
 
-    @ManyToMany(targetEntity = Role.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = Role.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "sys_user_role", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<Role> roles;

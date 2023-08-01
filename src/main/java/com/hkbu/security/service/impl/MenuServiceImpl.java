@@ -8,6 +8,7 @@ import com.hkbu.security.service.RoleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class MenuServiceImpl implements MenuService {
     RoleRepository roleRepository;
 
     @Override
+    @Transactional
     public List<String> findMenusByRoleIds(List<Long> roleIds) {
         List<Role> roles = roleRepository.findAllById(roleIds);
         List<String> permission = new ArrayList<>();

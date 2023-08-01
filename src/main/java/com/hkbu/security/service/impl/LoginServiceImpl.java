@@ -1,6 +1,5 @@
 package com.hkbu.security.service.impl;
 
-import com.hkbu.security.exception.GlobalException;
 import com.hkbu.security.pojo.LoginUser;
 import com.hkbu.security.pojo.User;
 import com.hkbu.security.service.LoginService;

@@ -6,7 +6,6 @@ import com.hkbu.security.utils.JwtUtils;
 import com.hkbu.security.utils.RedisCache;
 import com.hkbu.security.vo.ResponseEnum;
 import io.jsonwebtoken.Claims;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -29,14 +27,12 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
-        System.out.println(token);
         // 如果token为空则放行，让其访问匿名资源
         if (token == null){
             filterChain.doFilter(request, response);
             // 必须要return，否则无论token是否为空都会执行后面的代码
             return;
         }
-
         // 如果token不为空，判断token是否有效
         String userId;
         try {
@@ -49,11 +45,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // token有效：封装authentication添加到SecurityContextHolder中，这代表通过认证
         LoginUser loginUser = redisCache.getCacheObject(userId + ":token");
-        System.out.println(loginUser);
         if (loginUser == null){
             throw new GlobalException(ResponseEnum.TOKEN_ERROR);
         }
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
+        logger.info(loginUser);
+
+        // 自己通过Redis为SecurityContextHolder对象时，要手动把权限信息加进入
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 //        redisCache.setCacheObject(userId + ":token", loginUser, 60, TimeUnit.MINUTES);
         filterChain.doFilter(request, response);

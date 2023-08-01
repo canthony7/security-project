@@ -11,7 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
@@ -30,6 +32,12 @@ public class SecurityConfig {
 
     @Resource
     private JwtFilter jwtFilter;
+
+    @Resource
+    private AuthenticationEntryPoint authenticationEntryPoint;
+
+    @Resource
+    private AccessDeniedHandler accessDeniedHandler;
 
     /**
      * 指定加密方式
@@ -71,15 +79,17 @@ public class SecurityConfig {
                 //不通过Session获取SecurityContext
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                // 允许跨域
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
+                .and()
+        // 允许跨域
                 .cors()
                 .and()
                 // 配置路径是否需要认证
                 .authorizeRequests()
                 // 允许匿名访问
-                .antMatchers("/user/login", "/user/register", "/test/funny").permitAll()
+                .antMatchers("/user/login", "/user/register").permitAll()
                 // 配置权限
-                .antMatchers("/test/any", "/user/logout").authenticated()
+                .antMatchers("/test/any", "/user/logout", "/test/funny").authenticated()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()
